@@ -1,8 +1,10 @@
 class Bffr {
-  constructor(size, count) {
+  constructor(init, count) {
+    const _makeBuffer = typeof init === 'function' ? init : () => new ArrayBuffer(size);
+
     const buffers = Array(count);
     for (let i = 0; i < count; i++) {
-      buffers[i] = new ArrayBuffer(size);
+      buffers[i] = _makeBuffer();
     }
     this.buffers = buffers;
   }
@@ -16,5 +18,5 @@ class Bffr {
   }
 }
 
-const bffr = (size, count) => new Bffr(size, count);
+const bffr = (init, count) => new Bffr(init, count);
 module.exports = bffr;
