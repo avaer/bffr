@@ -1,6 +1,6 @@
 class Bffr {
   constructor(init, count) {
-    const _makeBuffer = typeof init === 'function' ? init : () => new ArrayBuffer(size);
+    const _makeBuffer = typeof init === 'function' ? init : () => new ArrayBuffer(init);
 
     const buffers = Array(count);
     for (let i = 0; i < count; i++) {
