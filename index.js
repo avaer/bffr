@@ -1,16 +1,23 @@
 class Bffr {
-  constructor(init, count) {
-    const _makeBuffer = typeof init === 'function' ? init : () => new ArrayBuffer(init);
+  constructor(init, count, {dynamic = false} = {}) {
+    this._makeBuffer = typeof init === 'function' ? init : () => new ArrayBuffer(init);
 
     const buffers = Array(count);
     for (let i = 0; i < count; i++) {
-      buffers[i] = _makeBuffer();
+      buffers[i] = this._makeBuffer();
     }
     this.buffers = buffers;
+    this.dynamic = dynamic;
   }
 
   alloc() {
-    return this.buffers.pop();
+    if (this.buffers.length > 0) {
+      return this.buffers.pop();
+    } else if (this.dynamic) {
+      return this._makeBuffer();
+    } else {
+      return null;
+    }
   }
 
   free(buffer) {
@@ -18,5 +25,5 @@ class Bffr {
   }
 }
 
-const bffr = (init, count) => new Bffr(init, count);
+const bffr = (init, count, options) => new Bffr(init, count, options);
 module.exports = bffr;
